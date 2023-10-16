@@ -8,4 +8,13 @@ export const CardContainer = styled.div`
         flex-direction: column;
         justify-content: end;
     }
+
+    p {
+        font-size: 1.2rem;
+    }
+`;
+
+
+export const Name = styled.h5`
+    font-weight: bold;
 `;

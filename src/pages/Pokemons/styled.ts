@@ -5,7 +5,19 @@ export const Main = styled.main`
   height: 100%;
   overflow: auto;
   display: grid;
-  grid-template-columns: repeat(5,1fr);
-  min-width: 100vw;
+  grid-template-columns: repeat(4, auto);
+  /* min-width: 100vw; */
+  gap: 10px;
+`;
+
+export const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
   gap: 10px;
 `;

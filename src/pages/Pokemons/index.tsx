@@ -1,56 +1,86 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { Header, Footer, Card } from "../../components";
-import { Main } from "./styled";
+import { ButtonsContainer, ContentContainer, Main } from "./styled";
 import { Pokemon } from "../../types/types";
 import { Loading } from "../../components/Loading";
 import { fetchPokemons } from "../../api/fetchPokemons";
 import { waitFor } from "../../helpers/waitFor";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { getPokemons } from "../../store/pokemons";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 const Component = () => {
-    const [query, setQuery] = useState("");
-    const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  // const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  // const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-      const fetchAllPokemons = async () => {
-        setIsLoading(true);
-        await waitFor(1000);
-        const allPokemons: Pokemon[] = await fetchPokemons();
-        setPokemons(allPokemons);
-        setIsLoading(false);
-      }
+  const dispatch = useAppDispatch();
+  const { isLoading, pokemons, page } = useAppSelector(
+    (state) => state.pokemons
+  );
 
-      fetchAllPokemons();
-    }, []);
+  useEffect(() => {
+    //   const fetchAllPokemons = async () => {
+    //     setIsLoading(true);
+    //     await waitFor(1000);
+    //     const allPokemons: Pokemon[] = await fetchPokemons();
+    //     setPokemons(allPokemons);
+    //     setIsLoading(false);
+    //   }
 
-    if(isLoading || !pokemons) {
-        return <Loading />
+    //   fetchAllPokemons();
+
+    if (pokemons[0] === undefined) {
+      dispatch(getPokemons());
     }
+  }, []);
 
-    const filteredPokemons = pokemons?.slice(0,151).filter((pokemon) => {
-        return pokemon.name.toLocaleLowerCase().match(query.toLocaleLowerCase());
-    });
-    
+  if (isLoading || !pokemons) {
+    return <Loading />;
+  }
 
-	return (
-		<>
-        <Header query={query} setQuery={setQuery}/>
+  const filteredPokemons = pokemons?.filter((pokemon) => {
+    return pokemon.name.toLocaleLowerCase().match(query.toLocaleLowerCase());
+  });
+
+  return (
+    <>
+      <Header query={query} setQuery={setQuery} />
+      <ContentContainer>
         <Main>
-            {
-                filteredPokemons?.slice(0,151).map((pokemon: Pokemon) => (
-                    <Card key={pokemon.id} 
-                    toLink={pokemon.name.toLocaleLowerCase()} 
-                    img={pokemon.img}
-                    pokemonId={pokemon.id}
-                    name={pokemon.name}
-                    />
-                ))
-            }
-
+          {filteredPokemons?.map((pokemon: any, index) => (
+            <Card
+              key={`${pokemon.name}-${index}`}
+              toLink={pokemon.name.toLocaleLowerCase()}
+              img={pokemon.img}
+              pokemonId={pokemon.id}
+              name={pokemon.name}
+            />
+          ))}
         </Main>
-        <Footer />
-        </>
-	);
+        <ButtonsContainer>
+          <button
+            className="btn btn-warning"
+            disabled={isLoading || page === 1}
+            onClick={() => dispatch(getPokemons(page - 1))}
+          >
+            Prev
+          </button>
+          <button
+            className="btn btn-success"
+            disabled={isLoading}
+            onClick={() => dispatch(getPokemons(page + 1))}
+          >
+            Next
+          </button>
+        </ButtonsContainer>
+
+      </ContentContainer>
+
+      <Footer />
+    </>
+  );
 };
 
 export { Component as Pokemons };

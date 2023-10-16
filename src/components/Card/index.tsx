@@ -1,5 +1,6 @@
+import React from 'react';
 import { Link } from "react-router-dom";
-import { CardContainer } from "./styled";
+import { CardContainer, Name } from "./styled";
 
 interface CardProps {
   toLink?: string;
@@ -14,16 +15,22 @@ interface CardProps {
 const Component = (props: CardProps) => {
   const { toLink, img, pokemonId, name, hp, attack, defense } = props;
   return (
-    <CardContainer className="card">
-      <img src={img} className="card-img-top" alt={name} />
+    <CardContainer className="card  border-info">
+      {
+        img &&   <img src={img} className="card-img-top" alt={name} />
+      }
+    
       <div className="card-body">
-        <h5 className="card-title">{name}</h5>
-        <p className="card-text">{pokemonId}</p>
+        <Name className="card-title">{name?.toUpperCase()}</Name>
+        {
+          pokemonId &&  <p className="card-subtitle mb-2 text-body-secondary">ID: {pokemonId}</p>
+        }
+       
         {hp ? (
           <>
-            <div>hp: {hp}</div>
-            <div>Attack: {attack}</div>
-            <div>Defense: {defense}</div>
+            <p className='card-text'>hp: {hp}</p>
+            <p className='card-text'>Attack: {attack}</p>
+            <p className='card-text'>Defense: {defense}</p>
           </>
         ) : (
           <Link to={`/pokemons/${toLink}`} className="btn btn-primary">

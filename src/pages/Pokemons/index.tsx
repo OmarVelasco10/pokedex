@@ -34,13 +34,14 @@ const Component = () => {
     if (pokemons[0] === undefined) {
       dispatch(getPokemons());
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading || !pokemons) {
     return <Loading />;
   }
 
-  const filteredPokemons = pokemons?.filter((pokemon) => {
+  const filteredPokemons = pokemons?.filter((pokemon: any) => {
     return pokemon.name.toLocaleLowerCase().match(query.toLocaleLowerCase());
   });
 
@@ -49,7 +50,7 @@ const Component = () => {
       <Header query={query} setQuery={setQuery} />
       <ContentContainer>
         <Main>
-          {filteredPokemons?.map((pokemon: any, index) => (
+          {filteredPokemons?.map((pokemon: any, index: number) => (
             <Card
               key={`${pokemon.name}-${index}`}
               toLink={pokemon.name.toLocaleLowerCase()}

@@ -26,6 +26,7 @@ export const getPokemons = (page = 1 ) => {
 
 export const getPokemon = (name: string) => {
     return async(dispatch: any) => {
+        dispatch(startLoadingPokemons())
         console.log('hola',name);
         const { data } = await pokemonApi.get(`/pokemon/${name}`);
         console.log(data);

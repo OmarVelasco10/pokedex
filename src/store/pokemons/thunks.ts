@@ -4,7 +4,7 @@ import { setCurrentPokemon, setPokemons, startLoadingPokemons } from "./pokemons
 
 export const getPokemons = (page = 1 ) => {
     return async(dispatch: any) => {
-        dispatch(startLoadingPokemons())
+        dispatch(startLoadingPokemons());
         
         console.log('getPokemons');
         //TODO: realizar petición http
@@ -26,7 +26,7 @@ export const getPokemons = (page = 1 ) => {
 
 export const getPokemon = (name: string) => {
     return async(dispatch: any) => {
-        dispatch(startLoadingPokemons())
+        dispatch(startLoadingPokemons());
         console.log('hola',name);
         const { data } = await pokemonApi.get(`/pokemon/${name}`);
         console.log(data);
